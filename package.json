@@ -1,0 +1,20 @@
+{
+  "name": "health-ai",
+  "version": "1.0.0",
+  "description": "Voice-first AI triage, community health worker support and AI-assisted basic diagnostics, with a deterministic safety layer and clinician oversight.",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  }
+}
