@@ -21,9 +21,9 @@ export function normalize(text) {
 const NEGATORS = new Set([
   'no', 'not', 'never', 'denies', 'denied', 'without', "don't", 'dont', "doesn't", 'doesnt',
   "didn't", 'didnt', 'none', 'nor', 'sin', 'nunca', 'tampoco', 'pas', 'sans', 'jamais',
-  'aucun', 'aucune', 'hakuna', 'sina', 'bila', 'hana', 'hajawahi',
+  'aucun', 'aucune', 'hakuna', 'sina', 'bila', 'hana', 'hajawahi', 'nao', 'nem', 'sem',
 ]);
-const CLAUSE_BREAK = /[.;!?\n]|,|\b(but|however|pero|mais|lakini|though|although)\b/g;
+const CLAUSE_BREAK = /[.;!?\n]|,|\b(but|however|pero|mais|mas|lakini|though|although|porem)\b/g;
 
 function isNegated(text, index) {
   const before = text.slice(Math.max(0, index - 60), index);
@@ -54,6 +54,8 @@ export const RED_FLAG_RULES = [
       re('mal (a la|dans la) poitrine'),
       re('maumivu ya kifua'),
       re('kifua (kinauma|kinabana)'),
+      re('(dor|aperto|pressao) no peito'),
+      re('dor toracica'),
     ],
   },
   {
@@ -74,6 +76,9 @@ export const RED_FLAG_RULES = [
       re('levres bleues'),
       re('(siwezi|hawezi|hashindwi|anashindwa|ninashindwa) kupumua'),
       re('midomo (ya )?bluu'),
+      re('nao (consigo|consegue) respirar'),
+      re('parou de respirar'),
+      re('(labios|rosto) (roxos|azuis|roxo|azul)'),
     ],
   },
   {
@@ -93,6 +98,8 @@ export const RED_FLAG_RULES = [
       re('ne (se )?reveille pas'),
       re('ne repond (pas|plus)'),
       re('(amezimia|hajitambui|kupoteza fahamu|hazinduki)'),
+      re('nao (acorda|responde)'),
+      re('desacordad'),
     ],
   },
   {
@@ -125,6 +132,9 @@ export const RED_FLAG_RULES = [
       re('(visage|bouche) (affaisse|tordu|de travers)'),
       re('\\bavc\\b'),
       re('(kiharusi|kupooza upande|uso umepinda)'),
+      re('boca torta'),
+      re('fala (enrolada|arrastada)'),
+      re('\\bderrame\\b'),
     ],
   },
   {
@@ -145,6 +155,8 @@ export const RED_FLAG_RULES = [
       re('hemorragie'),
       re('vomit (du )?sang'),
       re('(damu nyingi|kutapika damu|anatapika damu|anavuja damu)'),
+      re('sangramento (abundante|forte|intenso)'),
+      re('(vomit(ando|ou|a)|vomito com) sangue'),
     ],
   },
   {
@@ -160,6 +172,8 @@ export const RED_FLAG_RULES = [
       re('gonflement (de la |des )?(gorge|langue|levres)'),
       re('(koo|ulimi|midomo) (umevimba|imevimba|kuvimba)'),
       re('kuvimba (koo|ulimi|midomo)'),
+      re('(garganta|lingua|labios) inchad'),
+      re('inchaco (na|da|nos|dos) (garganta|lingua|labios)'),
     ],
   },
   {
@@ -178,6 +192,7 @@ export const RED_FLAG_RULES = [
       re('(matarme|quitarme la vida|quiero morir)'),
       re('(me tuer|envie de mourir|en finir)'),
       re('(kujiua|nataka kufa|kujidhuru)'),
+      re('(me matar|quero morrer|tirar (a )?minha (propria )?vida)'),
     ],
   },
   {
@@ -197,6 +212,8 @@ export const RED_FLAG_RULES = [
       re('morsure de serpent'),
       re('\\bsumu\\b'),
       re("(ameng'atwa|kung'atwa|kuumwa) na nyoka"),
+      re('(picada|mordida) de cobra'),
+      re('cobra (me |o |a )?(picou|mordeu)'),
     ],
   },
   {
@@ -208,6 +225,7 @@ export const RED_FLAG_RULES = [
       re('thunderclap'),
       re('(peor|mas fuerte) dolor de cabeza'),
       re('pire mal de tete'),
+      re('pior dor de cabeca'),
     ],
   },
   {
@@ -215,8 +233,8 @@ export const RED_FLAG_RULES = [
     level: 'emergency',
     message: 'Fever with a stiff neck can be meningitis.',
     all: [
-      [re('stiff neck'), re('neck (is )?stiff'), re('cuello rigido'), re('rigidite de la nuque'), re('nuque raide'), re('shingo (ngumu|imekaza)')],
-      [re('fever'), re('\\bhot\\b'), re('fiebre'), re('fievre'), re('homa'), re('joto')],
+      [re('stiff neck'), re('neck (is )?stiff'), re('cuello rigido'), re('rigidite de la nuque'), re('nuque raide'), re('shingo (ngumu|imekaza)'), re('(pescoco|nuca) (rigid|dur)'), re('rigidez (na|de) nuca')],
+      [re('fever'), re('\\bhot\\b'), re('fiebre'), re('fievre'), re('homa'), re('joto'), re('febre')],
     ],
   },
   {
@@ -233,6 +251,8 @@ export const RED_FLAG_RULES = [
       re('vomit tout'),
       re('(hawezi|hataki) (kunywa|kunyonya)'),
       re('anatapika kila kitu'),
+      re('nao (consegue|quer) (beber|mamar)'),
+      re('vomita tudo'),
     ],
   },
   {
@@ -240,8 +260,8 @@ export const RED_FLAG_RULES = [
     level: 'emergency',
     message: 'Head injury with vomiting, confusion or loss of consciousness.',
     all: [
-      [re('head (injury|trauma|wound)'), re('hit (my|his|her) head'), re('fell on (my|his|her) head'), re('golpe en la cabeza'), re('coup (a|sur) la tete'), re('jeraha (la|kichwani)')],
-      [re('vomit'), re('confus'), re('passed out'), re('blacked out'), re('vomit'), re('perdio el conocimiento'), re('perdu connaissance'), re('kutapika'), re('kuchanganyikiwa')],
+      [re('head (injury|trauma|wound)'), re('hit (my|his|her) head'), re('fell on (my|his|her) head'), re('golpe en la cabeza'), re('coup (a|sur) la tete'), re('jeraha (la|kichwani)'), re('(pancada|batida) na cabeca'), re('bateu (a|com a) cabeca')],
+      [re('vomit'), re('confus'), re('passed out'), re('blacked out'), re('vomit'), re('perdio el conocimiento'), re('perdu connaissance'), re('kutapika'), re('kuchanganyikiwa'), re('desmaiou'), re('desacordad')],
     ],
   },
 
@@ -266,6 +286,8 @@ export const RED_FLAG_RULES = [
       re('(dolor de cabeza (fuerte|intenso)|vision borrosa)'),
       re('(mal de tete (severe|intense)|vision (floue|trouble))'),
       re('(kichwa kinauma sana|kuona ukungu|uso umevimba)'),
+      re('(dor de cabeca (forte|intensa)|visao (turva|embacada))'),
+      re('(rosto|maos) inchad'),
     ],
   },
   {
@@ -284,6 +306,9 @@ export const RED_FLAG_RULES = [
       re('perte des eaux'),
       re('mtoto (hachezi|hacheza)'),
       re('maji yamevunjika'),
+      re('(bebe|nene) (nao (se )?mexe|parou de mexer)'),
+      re('bolsa (rompeu|estourou)'),
+      re('dor (forte|intensa) na barriga'),
     ],
   },
   {
@@ -291,7 +316,7 @@ export const RED_FLAG_RULES = [
     level: 'urgent',
     message: 'Fever during pregnancy needs assessment today.',
     when: (c) => c.pregnant,
-    patterns: [re('fever'), re('fiebre'), re('fievre'), re('homa')],
+    patterns: [re('fever'), re('fiebre'), re('fievre'), re('homa'), re('febre')],
   },
 
   // ---------- Age-specific ----------
@@ -300,7 +325,7 @@ export const RED_FLAG_RULES = [
     level: 'emergency',
     message: 'Fever in a baby under 3 months always needs immediate assessment.',
     when: (c) => typeof c.ageYears === 'number' && c.ageYears < 0.25,
-    patterns: [re('fever'), re('\\b(feels |is |very )?hot\\b'), re('fiebre'), re('fievre'), re('homa'), re('joto')],
+    patterns: [re('fever'), re('\\b(feels |is |very )?hot\\b'), re('fiebre'), re('fievre'), re('homa'), re('joto'), re('febre')],
   },
 
   // ---------- Urgent ----------
@@ -319,19 +344,23 @@ export const RED_FLAG_RULES = [
       re('(difficulte|mal) a respirer'),
       re('essouffl'),
       re('(shida ya kupumua|anapumua haraka|kubanwa na pumzi)'),
+      re('falta de ar'),
+      re('dificuldade (para|de|em) respirar'),
+      re('respira(ndo|cao) (rapid|ofegante)'),
+      re('chiado no peito'),
     ],
   },
   {
     id: 'fainting',
     level: 'urgent',
     message: 'Fainting should be checked today.',
-    patterns: [re('faint(ed|ing)?'), re('passed out'), re('blacked out'), re('desmay'), re('evanoui'), re('alizimia')],
+    patterns: [re('faint(ed|ing)?'), re('passed out'), re('blacked out'), re('desmay'), re('evanoui'), re('alizimia'), re('desmai')],
   },
   {
     id: 'coughing_blood',
     level: 'urgent',
     message: 'Coughing up blood needs assessment today.',
-    patterns: [re('cough(ing)? (up )?blood'), re('blood (when|while) (i |he |she )?cough'), re('tos con sangre'), re('tousse du sang'), re('kukohoa damu')],
+    patterns: [re('cough(ing)? (up )?blood'), re('blood (when|while) (i |he |she )?cough'), re('tos con sangre'), re('tousse du sang'), re('kukohoa damu'), re('(tosse com|tossindo) sangue')],
   },
   {
     id: 'blood_in_stool_urine',
@@ -344,6 +373,8 @@ export const RED_FLAG_RULES = [
       re('diarrea con sangre'),
       re('sang dans (les selles|les urines)'),
       re('(damu kwenye (choo|mkojo)|kuhara damu)'),
+      re('sangue (nas fezes|na urina|no coco|no xixi)'),
+      re('diarreia com sangue'),
     ],
   },
   {
@@ -357,13 +388,15 @@ export const RED_FLAG_RULES = [
       re('ojos hundidos'),
       re('yeux (creux|enfonces)'),
       re('macho yamezama'),
+      re('olhos fundos'),
+      re('nao (fez|faz) xixi'),
     ],
   },
   {
     id: 'jaundice',
     level: 'urgent',
     message: 'Yellow eyes or skin (jaundice) needs assessment.',
-    patterns: [re('yellow (eyes|skin|palms|soles)'), re('(eyes|skin) (are |is |look |turned )?yellow'), re('jaundice'), re('ojos amarillos'), re('ictericia'), re('yeux jaunes'), re('jaunisse'), re('macho (ya )?njano'), re('manjano')],
+    patterns: [re('yellow (eyes|skin|palms|soles)'), re('(eyes|skin) (are |is |look |turned )?yellow'), re('jaundice'), re('ojos amarillos'), re('ictericia'), re('yeux jaunes'), re('jaunisse'), re('macho (ya )?njano'), re('manjano'), re('olhos amarelos'), re('pele amarela')],
   },
   {
     id: 'high_fever',
@@ -375,6 +408,7 @@ export const RED_FLAG_RULES = [
       re('(fiebre alta|fiebre muy alta)'),
       re('(forte fievre|fievre (elevee|forte))'),
       re('homa kali'),
+      re('febre (alta|muito alta)'),
     ],
   },
   {
@@ -386,6 +420,7 @@ export const RED_FLAG_RULES = [
       re('dolor (muy )?(fuerte|intenso|insoportable)'),
       re('douleur (intense|insupportable|severe)'),
       re('maumivu makali'),
+      re('dor (muito )?(forte|intensa|insuportavel)'),
     ],
   },
   {
@@ -398,7 +433,7 @@ export const RED_FLAG_RULES = [
     id: 'stiff_neck',
     level: 'urgent',
     message: 'A stiff neck should be checked, especially with fever.',
-    patterns: [re('stiff neck'), re('neck (is )?stiff'), re('cuello rigido'), re('nuque raide'), re('shingo ngumu')],
+    patterns: [re('stiff neck'), re('neck (is )?stiff'), re('cuello rigido'), re('nuque raide'), re('shingo ngumu'), re('(pescoco|nuca) (rigid|dur)'), re('rigidez (na|de) nuca')],
   },
   {
     id: 'possible_tb',
@@ -411,6 +446,8 @@ export const RED_FLAG_RULES = [
       re('tos (desde hace|por) (\\d+|dos|tres|varias) semanas'),
       re('toux depuis (\\d+|deux|trois|plusieurs) semaines'),
       re('kikohozi (kwa|cha) wiki'),
+      re('tosse (ha|por|faz) (\\d+|duas|tres|varias) semanas'),
+      re('suores? noturnos?'),
     ],
   },
 ];

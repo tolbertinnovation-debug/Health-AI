@@ -8,6 +8,7 @@ import { safetyAssessment } from '../shared/safety.js';
 import { maxLevel, isValidLevel } from '../shared/levels.js';
 import { PROTOCOLS } from '../shared/protocols.js';
 import { LANGUAGE_NAMES } from './prompts.js';
+import { createChannelsRouter } from './channels/index.js';
 
 const ROLE_RANK = { public: 0, chw: 1, clinician: 2, admin: 3 };
 
@@ -77,6 +78,7 @@ export function createApp({ store }) {
       emergencyNumber: config.emergencyNumber,
       languages: LANGUAGE_NAMES,
       protocols: PROTOCOLS.map((p) => ({ id: p.id, title: p.title })),
+      channels: { sms: true, ussd: true, voice: true },
     }),
   );
 
@@ -209,6 +211,9 @@ export function createApp({ store }) {
 
   app.get('/api/metrics', requireRole('clinician'), (_req, res) => res.json(store.metrics()));
   app.get('/api/audit', requireRole('clinician'), (req, res) => res.json(store.listAudit(Math.min(500, Number(req.query.limit) || 100))));
+
+  // ---------- Basic-phone channels: SMS, USSD, voice calls ----------
+  app.use('/api/channels', createChannelsRouter({ store }));
 
   // ---------- Static frontend (PWA) ----------
   app.use('/shared', express.static(path.join(ROOT, 'shared'), { maxAge: '1h' }));

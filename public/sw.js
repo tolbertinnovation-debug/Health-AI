@@ -1,6 +1,6 @@
 // Offline support: cache the app shell and shared safety rules so triage still works
 // without a connection. API calls always go to the network.
-const CACHE = 'health-ai-v1';
+const CACHE = 'health-ai-v2';
 const SHELL = [
   '/', '/index.html', '/styles.css', '/app.js', '/i18n.js', '/manifest.webmanifest', '/icons/icon.svg',
   '/shared/levels.js', '/shared/redflags.js', '/shared/vitals.js', '/shared/protocols.js', '/shared/safety.js',

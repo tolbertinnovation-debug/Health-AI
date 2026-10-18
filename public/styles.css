@@ -100,11 +100,11 @@ input:focus, select:focus, textarea:focus, button:focus-visible { outline: 3px s
 .text-form input { flex: 1; }
 
 /* Result */
-.result { border-left: 8px solid var(--lvl); }
+.result { border-inline-start: 8px solid var(--lvl); }
 .result .level { display: flex; align-items: center; gap: .6rem; color: var(--lvl); font-size: 1.25rem; font-weight: 800; }
 .result .level .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--lvl); flex: none; }
 .result .action { font-size: 1.08rem; font-weight: 600; margin: .3rem 0 .6rem; }
-.result ul { margin: .2rem 0; padding-left: 1.2rem; }
+.result ul { margin: .2rem 0; padding-inline-start: 1.2rem; }
 .lvl-emergency { --lvl: var(--emergency); }
 .lvl-urgent { --lvl: var(--urgent); }
 .lvl-routine { --lvl: var(--routine); }

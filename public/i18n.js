@@ -69,16 +69,76 @@ const STRINGS = {
     consent_accept: 'Nimeelewa', save: 'Hifadhi', cancel: 'Ghairi', yes: 'Ndiyo', no: 'Hapana', assess: 'Tathmini', back: 'Rudi',
     language: 'Lugha', voice_output: 'Soma majibu kwa sauti', follow_up: 'Tafadhali jibu',
   },
+  pt: {
+    tab_talk: 'Falar', tab_chw: 'Agente de saúde', tab_scan: 'Foto', tab_review: 'Revisão', tab_settings: 'Ajustes',
+    talk_title: 'Como posso ajudar?', talk_intro: 'Toque no microfone e descreva como você ou a pessoa de quem cuida está se sentindo. Também pode escrever.',
+    tap_to_speak: 'Toque para falar', listening: 'Ouvindo… toque para parar', transcribing: 'Entendendo…', thinking: 'Avaliando…',
+    type_placeholder: 'Descreva os sintomas…', send: 'Enviar', new_conversation: 'Recomeçar',
+    about_person: 'Sobre a pessoa', age: 'Idade (anos)', age_months: 'ou meses', sex: 'Sexo', female: 'Feminino', male: 'Masculino', other: 'Outro',
+    pregnant: 'Grávida', call_emergency: 'Ligar para emergência', why: 'Por que este conselho?', what_to_do: 'O que fazer agora',
+    seek_care_if: 'Procure ajuda antes se', possible_causes: 'Causas possíveis', safety_found: 'A verificação de segurança encontrou',
+    offline_badge: 'Verificação offline — conecte-se para a avaliação completa', demo_badge: 'Modo demonstração',
+    raised_by_rules: 'Elevado pelas regras de segurança', disclaimer: 'O Health AI orienta, não faz diagnóstico, e não substitui um profissional de saúde.',
+    consent_title: 'Antes de começar', consent_body: 'O Health AI é um assistente, não um médico. Ele pode errar. Em uma emergência, ligue para o número de emergência local ou vá ao serviço de saúde mais próximo. O que você compartilha é processado por um serviço de IA; evite compartilhar nomes ou números de documentos.',
+    consent_accept: 'Entendi', patients: 'Pacientes', new_patient: 'Novo paciente', search: 'Buscar', name: 'Nome ou ID', village: 'Comunidade / área',
+    save: 'Salvar', cancel: 'Cancelar', start_assessment: 'Iniciar avaliação', history: 'Histórico', protocol: 'Protocolo', vitals: 'Sinais vitais',
+    yes: 'Sim', no: 'Não', notes: 'Notas / sintomas', assess: 'Avaliar', save_encounter: 'Salvar no registro', saved: 'Salvo',
+    queued: 'Salvo offline — será sincronizado', referral_note: 'Nota de encaminhamento', copy: 'Copiar', copied: 'Copiado', chw_guidance: 'Orientação para o agente de saúde',
+    scan_title: 'Verificação por imagem', scan_intro: 'Tire uma foto nítida com boa luz. Os resultados devem ser confirmados por um profissional treinado.',
+    kind_rdt: 'Teste rápido (TDR)', kind_skin: 'Pele / erupção', kind_wound: 'Ferida / queimadura', kind_eye: 'Olho', kind_other: 'Outro',
+    take_photo: 'Tirar ou escolher foto', analyze: 'Analisar', rdt_result: 'Leitura do teste', image_quality: 'Qualidade da imagem', findings: 'Achados', recommendations: 'Recomendações',
+    attach_patient: 'Vincular a paciente (opcional)', none: 'Nenhum', review_title: 'Revisão clínica', pending: 'Pendentes', all: 'Todos',
+    agree: 'Concordo', modify: 'Mudar nível', outcome: 'Desfecho (opcional)', review_note: 'Nota', submit: 'Enviar',
+    language: 'Idioma', voice_output: 'Ler respostas em voz alta', access_token: 'Código de acesso', apply: 'Aplicar', role: 'Nível de acesso',
+    emergency_number: 'Número de emergência', pending_sync: 'aguardando sincronização', sync_now: 'Sincronizar agora', back: 'Voltar', ai_error: 'IA indisponível — mostrando resultado das regras de segurança.',
+    temp: 'Temperatura °C', hr: 'Frequência cardíaca /min', rr: 'Respirações /min', spo2: 'Oxigênio SpO₂ %', sys: 'PA sistólica', dia: 'PA diastólica', glu: 'Glicemia mg/dL', muac: 'PB (MUAC) mm',
+    metrics: 'Indicadores de qualidade', no_items: 'Nada aqui ainda.', mic_denied: 'Microfone indisponível. Por favor, escreva.',
+    follow_up: 'Por favor responda', ai_label: 'Nível da IA', confidence: 'Confiança',
+  },
+  ar: {
+    tab_talk: 'تحدّث', tab_chw: 'العامل الصحي', tab_scan: 'صورة', tab_review: 'مراجعة', tab_settings: 'الإعدادات',
+    talk_title: 'كيف يمكنني المساعدة؟', talk_intro: 'اضغط على الميكروفون وصف ما تشعر به أنت أو الشخص الذي تعتني به. يمكنك أيضًا الكتابة.',
+    tap_to_speak: 'اضغط للتحدث', listening: 'أستمع… اضغط للإيقاف', transcribing: 'أفهم…', thinking: 'أقيّم…',
+    type_placeholder: 'صف الأعراض…', send: 'إرسال', new_conversation: 'ابدأ من جديد',
+    about_person: 'عن الشخص', age: 'العمر (سنوات)', age_months: 'أو أشهر', sex: 'الجنس', female: 'أنثى', male: 'ذكر', other: 'آخر',
+    pregnant: 'حامل', call_emergency: 'اتصل بالطوارئ', why: 'لماذا هذه النصيحة؟', what_to_do: 'ماذا تفعل الآن',
+    seek_care_if: 'اطلب المساعدة مبكرًا إذا', possible_causes: 'أسباب محتملة', safety_found: 'وجد فحص السلامة',
+    offline_badge: 'فحص دون اتصال — اتصل بالإنترنت للتقييم الكامل', demo_badge: 'وضع تجريبي',
+    raised_by_rules: 'رُفع بواسطة قواعد السلامة', disclaimer: 'يقدم Health AI إرشادات وليس تشخيصًا، ولا يحل محل العامل الصحي.',
+    consent_title: 'قبل أن تبدأ', consent_body: 'Health AI مساعد وليس طبيبًا، وقد يخطئ. في حالة الطوارئ اتصل برقم الطوارئ المحلي أو اذهب إلى أقرب مرفق صحي. تتم معالجة ما تشاركه بواسطة خدمة ذكاء اصطناعي؛ تجنب مشاركة الأسماء أو أرقام الهوية.',
+    consent_accept: 'فهمت', patients: 'المرضى', new_patient: 'مريض جديد', search: 'بحث', name: 'الاسم أو الرقم', village: 'القرية / المنطقة',
+    save: 'حفظ', cancel: 'إلغاء', start_assessment: 'بدء التقييم', history: 'السجل', protocol: 'البروتوكول', vitals: 'العلامات الحيوية',
+    yes: 'نعم', no: 'لا', notes: 'ملاحظات / أعراض', assess: 'تقييم', save_encounter: 'حفظ في السجل', saved: 'تم الحفظ',
+    queued: 'حُفظ دون اتصال — ستتم المزامنة', referral_note: 'مذكرة الإحالة', copy: 'نسخ', copied: 'تم النسخ', chw_guidance: 'إرشادات للعامل الصحي',
+    scan_title: 'فحص بالصورة', scan_intro: 'التقط صورة واضحة في إضاءة جيدة. يجب أن يؤكد النتائج عامل صحي مدرَّب.',
+    kind_rdt: 'اختبار سريع', kind_skin: 'جلد / طفح', kind_wound: 'جرح / حرق', kind_eye: 'عين', kind_other: 'أخرى',
+    take_photo: 'التقط أو اختر صورة', analyze: 'تحليل', rdt_result: 'قراءة الاختبار', image_quality: 'جودة الصورة', findings: 'النتائج', recommendations: 'التوصيات',
+    attach_patient: 'ربط بمريض (اختياري)', none: 'لا شيء', review_title: 'مراجعة الطبيب', pending: 'قيد الانتظار', all: 'الكل',
+    agree: 'موافق', modify: 'تغيير المستوى', outcome: 'النتيجة (اختياري)', review_note: 'ملاحظة', submit: 'إرسال',
+    language: 'اللغة', voice_output: 'قراءة الإجابات بصوت عالٍ', access_token: 'رمز الدخول', apply: 'تطبيق', role: 'مستوى الوصول',
+    emergency_number: 'رقم الطوارئ', pending_sync: 'بانتظار المزامنة', sync_now: 'زامن الآن', back: 'رجوع', ai_error: 'الذكاء الاصطناعي غير متاح — عرض نتيجة قواعد السلامة.',
+    temp: 'الحرارة °م', hr: 'النبض /دقيقة', rr: 'التنفس /دقيقة', spo2: 'الأكسجين SpO₂ %', sys: 'الضغط الانقباضي', dia: 'الضغط الانبساطي', glu: 'السكر mg/dL', muac: 'محيط الذراع مم',
+    metrics: 'مؤشرات الجودة', no_items: 'لا شيء هنا بعد.', mic_denied: 'الميكروفون غير متاح. يرجى الكتابة.',
+    follow_up: 'يرجى الإجابة', ai_label: 'مستوى الذكاء الاصطناعي', confidence: 'الثقة',
+  },
 };
 
+const RTL = new Set(['ar']);
+
+// `current` is the language the AI answers in; the interface falls back to English for any
+// string not translated yet (e.g. Hausa, Amharic).
 let current = 'en';
 export function setLanguage(lang) {
-  current = STRINGS[lang] ? lang : 'en';
+  current = UI_LANGUAGES[lang] ? lang : 'en';
   document.documentElement.lang = current;
+  document.documentElement.dir = RTL.has(current) ? 'rtl' : 'ltr';
 }
 export const getLanguage = () => current;
 export const t = (key) => STRINGS[current]?.[key] ?? STRINGS.en[key] ?? key;
-export const UI_LANGUAGES = { en: 'English', es: 'Español', fr: 'Français', sw: 'Kiswahili' };
+export const UI_LANGUAGES = {
+  en: 'English', es: 'Español', fr: 'Français', sw: 'Kiswahili', pt: 'Português', ar: 'العربية',
+  ha: 'Hausa (AI)', am: 'አማርኛ (AI)', yo: 'Yorùbá (AI)', hi: 'हिन्दी (AI)',
+};
 
 // BCP-47 tags for on-device speech recognition / synthesis.
 export const SPEECH_LANG = { en: 'en-US', es: 'es-ES', fr: 'fr-FR', sw: 'sw-KE', pt: 'pt-BR', ar: 'ar', hi: 'hi-IN', ha: 'ha-NG', am: 'am-ET', yo: 'yo-NG' };

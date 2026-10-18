@@ -41,6 +41,12 @@ CREATE TABLE IF NOT EXISTS encounters (
 );
 CREATE INDEX IF NOT EXISTS idx_enc_patient ON encounters(patient_id);
 CREATE INDEX IF NOT EXISTS idx_enc_review ON encounters(review_status, level);
+CREATE TABLE IF NOT EXISTS channel_sessions (
+  id TEXT PRIMARY KEY,           -- keyed hash of channel + phone number / call id (never the raw number)
+  channel TEXT NOT NULL,
+  data_json TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS audit (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   ts TEXT NOT NULL,
@@ -196,6 +202,47 @@ export function openStore(dbPath) {
         status, now(), actor ?? null, decision === 'agree' ? cur.level : level, note ?? null, outcome ?? null, id,
       );
       return this.getEncounter(id);
+    },
+
+    // ---- SMS / voice / USSD conversation state (expires after `maxAgeHours` of inactivity)
+    getChannelSession(id, maxAgeHours = 24) {
+      const r = db.prepare('SELECT * FROM channel_sessions WHERE id = ?').get(id);
+      if (!r) return null;
+      if (Date.now() - Date.parse(r.updated_at) > maxAgeHours * 3600_000) {
+        this.deleteChannelSession(id);
+        return null;
+      }
+      return parse(r.data_json);
+    },
+
+    saveChannelSession(id, channel, data) {
+      db.prepare(
+        'INSERT INTO channel_sessions (id, channel, data_json, updated_at) VALUES (?,?,?,?) ON CONFLICT(id) DO UPDATE SET data_json = excluded.data_json, updated_at = excluded.updated_at',
+      ).run(id, channel, JSON.stringify(data), now());
+    },
+
+    deleteChannelSession(id) {
+      db.prepare('DELETE FROM channel_sessions WHERE id = ?').run(id);
+    },
+
+    purgeChannelSessions(maxAgeHours = 24) {
+      return db.prepare('DELETE FROM channel_sessions WHERE updated_at < ?').run(new Date(Date.now() - maxAgeHours * 3600_000).toISOString()).changes;
+    },
+
+    /**
+     * Create or update the encounter for an ongoing remote conversation (one per session),
+     * so SMS and phone cases reach the clinician review queue. A rise in level re-opens review.
+     */
+    upsertEncounter(clientId, e, actor) {
+      const existing = db.prepare('SELECT id, level FROM encounters WHERE client_id = ?').get(clientId);
+      if (!existing) return this.createEncounter({ ...e, clientId }, actor);
+      const order = { emergency: 3, urgent: 2, routine: 1, self_care: 0 };
+      const reopen = order[e.level] > order[existing.level];
+      db.prepare(
+        `UPDATE encounters SET level=?, ai_level=?, overridden=?, source=?, confidence=?, input_json=?, result_json=?
+         ${reopen ? ", review_status='pending', reviewed_at=NULL, reviewed_by=NULL, review_level=NULL" : ''} WHERE id=?`,
+      ).run(e.level, e.aiLevel ?? null, e.overridden ? 1 : 0, e.source ?? null, e.confidence ?? null, JSON.stringify(e.input ?? null), JSON.stringify(e.result ?? null), existing.id);
+      return this.getEncounter(existing.id);
     },
 
     /** Quality metrics that build the evidence base for safety and regulatory review. */

@@ -19,6 +19,7 @@ export const TRIAGE_SCHEMA = {
   required: [
     'triage_level', 'summary', 'likely_conditions', 'red_flags_detected', 'follow_up_questions',
     'needs_more_info', 'advice', 'when_to_seek_care', 'referral_note', 'confidence', 'spoken_response',
+    'english_translation', 'detected_language',
   ],
   properties: {
     triage_level: { type: 'string', enum: LEVELS },
@@ -32,6 +33,8 @@ export const TRIAGE_SCHEMA = {
     referral_note: str,
     confidence: likelihood,
     spoken_response: str,
+    english_translation: str,
+    detected_language: str,
   },
 };
 

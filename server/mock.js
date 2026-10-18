@@ -26,6 +26,8 @@ export function mockTriage(input, safety) {
     when_to_seek_care: 'Seek care immediately if breathing becomes difficult, there is chest pain, confusion, convulsions, or the person cannot drink.',
     referral_note: `DEMO. Age ${input.patient.ageYears ?? '?'}y. Complaint: ${userTurns.map((m) => m.content).join(' / ').slice(0, 300)}. Level: ${level}.`,
     confidence: 'low',
+    english_translation: '',
+    detected_language: input.language === 'auto' ? 'en' : input.language,
     spoken_response: needsMore
       ? `${LEVEL_INFO[level].action.en} How long have you had these symptoms?`
       : LEVEL_INFO[level].action.en,

@@ -50,3 +50,20 @@ export const authEnabled = () => config.tokens.size > 0;
 // Free-text description of the deployment setting, given to the AI so it weighs locally
 // common conditions (e.g. "rural western Kenya, malaria-endemic, high HIV prevalence").
 config.regionContext = env.REGION_CONTEXT || '';
+
+// ---- Basic-phone channels (SMS, USSD, voice calls)
+config.channels = {
+  // Secret used to hash phone numbers / call ids. Set it so sessions survive restarts.
+  secret: env.CHANNEL_SECRET || '',
+  // Shared key required as ?key=… on webhooks that have no signature scheme (Africa's Talking, generic).
+  webhookKey: env.CHANNEL_WEBHOOK_KEY || '',
+  publicUrl: (env.PUBLIC_URL || '').replace(/\/$/, ''),
+  hotlineNumber: env.HOTLINE_NUMBER || '',
+  smsPerHour: Number(env.SMS_PER_HOUR || 30),
+  twilio: { authToken: env.TWILIO_AUTH_TOKEN || '' },
+  africasTalking: {
+    username: env.AT_USERNAME || '',
+    apiKey: env.AT_API_KEY || '',
+    senderId: env.AT_SENDER_ID || '',
+  },
+};

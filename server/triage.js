@@ -34,7 +34,7 @@ export function validateTriageInput(body) {
       patient: { ageYears, sex: ['female', 'male', 'other'].includes(p.sex) ? p.sex : undefined, pregnant: Boolean(p.pregnant) },
       vitals: typeof body?.vitals === 'object' && body.vitals ? body.vitals : {},
       protocol: body?.protocol?.id ? { id: String(body.protocol.id), answers: body.protocol.answers ?? {} } : undefined,
-      language: typeof body?.language === 'string' ? body.language.slice(0, 5) : 'en',
+      language: typeof body?.language === 'string' && /^([a-z]{2}|auto)$/.test(body.language) ? body.language : 'en',
       mode: body?.mode === 'chw' ? 'chw' : 'self',
     },
   };
@@ -70,6 +70,8 @@ function rulesOnlyResult(input, reason) {
     referral_note: `Rules-only triage (${reason}). Level: ${off.level}. Findings: ${msgs.join('; ') || 'none'}.`,
     confidence: 'low',
     spoken_response: `${LEVEL_INFO[off.level].action.en}`,
+    english_translation: '',
+    detected_language: input.language === 'auto' ? 'en' : input.language,
   };
 }
 
@@ -92,7 +94,7 @@ export function mergeWithSafety(ai, safety) {
 }
 
 export async function runTriage(input) {
-  const safety = safetyAssessment({ text: userText(input), patient: input.patient, vitals: input.vitals, protocol: input.protocol });
+  let safety = safetyAssessment({ text: userText(input), patient: input.patient, vitals: input.vitals, protocol: input.protocol });
   let ai;
   let source = 'ai';
   let model = config.models.triage;
@@ -125,9 +127,19 @@ export async function runTriage(input) {
     }
   }
 
+  // Second safety pass on the model's English translation, so the deterministic floor also
+  // covers languages the red-flag rules do not know (Hausa, Amharic, Arabic, …).
+  if (ai.english_translation && source === 'ai') {
+    const translated = safetyAssessment({
+      text: `${userText(input)}\n${ai.english_translation}`, patient: input.patient, vitals: input.vitals, protocol: input.protocol,
+    });
+    if (rank(translated.level) > rank(safety.level)) safety = { ...translated, viaTranslation: true };
+  }
+
   const merged = mergeWithSafety(ai, safety);
   const info = LEVEL_INFO[merged.level];
-  const lang = info.action[input.language] ? input.language : 'en';
+  const replyLang = input.language === 'auto' ? ai.detected_language : input.language;
+  const lang = info.action[replyLang] ? replyLang : 'en';
   // When safety rules escalate, make sure the spoken response leads with the action.
   let spoken = ai.spoken_response;
   if (merged.overridden && rank(merged.level) >= rank('urgent')) spoken = `${info.action[lang]} ${spoken}`;
@@ -142,6 +154,7 @@ export async function runTriage(input) {
     source,
     model,
     aiError,
+    language: lang,
     assessment: { ...ai, spoken_response: spoken },
     safety,
     emergencyNumber: config.emergencyNumber,
